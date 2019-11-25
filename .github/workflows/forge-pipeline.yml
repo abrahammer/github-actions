@@ -20,7 +20,9 @@ jobs:
     runs-on: [windows-latest]
     needs: [build]
     steps:
-      - run: 'echo Windows Testing Successful'
+    - uses: abrahammer/adsk-action@master
+      with:
+        myInput: 'echo Windows Testing Successful'
   mac-test:
     runs-on: [macOS-latest]
     needs: [build]

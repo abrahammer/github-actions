@@ -1,0 +1,35 @@
+name: adsk
+
+on: [push, pull_request]
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: abrahammer/adsk-action@master
+      with:
+        myInput: 'echo Build Success'
+  linux-test: 
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+    - uses: abrahammer/adsk-action@master
+      with:
+        myInput: 'echo Testing Successful'
+  windows-test:
+    runs-on: [windows-latest]
+    needs: [build]
+    steps:
+      - run: 'echo Windows Testing Successful'
+  mac-test:
+    runs-on: [macOS-latest]
+    needs: [build]
+    steps:
+      - run: 'echo Mac Testing Successful'
+  deploy:
+    runs-on: [ubuntu-latest]
+    needs: [linux-test,windows-test,mac-test]
+    steps:
+      - uses: abrahammer/adsk-action@master
+        with:
+          myInput: 'exit 1'

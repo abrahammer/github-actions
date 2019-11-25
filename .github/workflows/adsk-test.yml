@@ -8,4 +8,4 @@ jobs:
     steps:
     - uses: abrahammer/adsk-action@v1
       with:
-        myInput: 'echo Hello'
+        myInput: 'exit code 1'

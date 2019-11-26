@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        run: docker build . --file Dockerfile --tag image
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
@@ -52,15 +52,17 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag image $IMAGE_NAME:$VERSION
-          docker push $IMAGE_NAME:$VERSION
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
   
   custom-action: 
     runs-on: ubuntu-latest
     steps:
     - uses: abrahammer/adsk-action@master
       with:
-        myInput: 'echo Custom Action Success'
+        with:
+          service_id: 'ACME'
+          version: 'latest'
   test:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

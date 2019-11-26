@@ -71,6 +71,7 @@ jobs:
     steps:
       - name: Test Results
         run: |
+          mkdir -p /artifacts
           echo ${{ matrix.os }} > artifacts/${{ matrix.os }}-test-results.txt
       - name: Upload artifact
         uses: actions/upload-artifact@v1.0.0

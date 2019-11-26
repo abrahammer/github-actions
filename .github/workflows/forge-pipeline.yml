@@ -2,7 +2,7 @@ name: forge
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
+    # Publish `master` as Docker `latest` image
     branches:
       - master
 

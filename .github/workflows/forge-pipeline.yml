@@ -1,4 +1,4 @@
-name: adsk
+name: forge
 
 on:
   push:
@@ -52,8 +52,8 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag image $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          docker tag image $IMAGE_NAME:$VERSION
+          docker push $IMAGE_NAME:$VERSION
   
   custom-action: 
     runs-on: ubuntu-latest
@@ -61,28 +61,21 @@ jobs:
     - uses: abrahammer/adsk-action@master
       with:
         myInput: 'echo Custom Action Success'
-  linux-test: 
-    runs-on: ubuntu-latest
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
     needs: [build-docker]
     steps:
-    - uses: abrahammer/adsk-action@master
-      with:
-        myInput: 'echo Testing Successful'
-  windows-test:
-    runs-on: [windows-latest]
-    needs: [build-docker]
-    steps:
-      - run: 'echo Windows Testing Successful'
-  mac-test:
-    runs-on: [macOS-latest]
-    needs: [build-docker]
-    steps:
-      - run: 'echo Mac Testing Successful'
+    - run: echo ${{ matrix.os }}
   deploy:
     runs-on: [ubuntu-latest]
-    needs: [linux-test,windows-test,mac-test]
-    if: github.event_name == 'pull_request'
+    needs: [test]
+    if: github.event_name == 'push' && github.event.tags == 'v*'
     steps:
       - uses: abrahammer/adsk-action@master
         with:
-          myInput: 'exit 1'
+          service_id: 'ACME'
+          version: 'latest'

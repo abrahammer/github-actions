@@ -69,7 +69,14 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     needs: [build-docker]
     steps:
-    - run: echo ${{ matrix.os }}
+      - name: Test Results
+        run: |
+          echo ${{ matrix.os }} > artifacts/${{ matrix.os }}-test-results.txt
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: ${{ matrix.os }}
+          path: artifacts
   deploy:
     runs-on: [ubuntu-latest]
     needs: [test]

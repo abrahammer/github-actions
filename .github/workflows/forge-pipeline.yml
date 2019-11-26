@@ -60,9 +60,8 @@ jobs:
     steps:
     - uses: abrahammer/adsk-action@master
       with:
-        with:
-          service_id: 'ACME'
-          version: 'latest'
+        service_id: 'ACME'
+        version: 'latest'
   test:
     name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

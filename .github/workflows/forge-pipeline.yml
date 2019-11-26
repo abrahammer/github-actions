@@ -82,7 +82,7 @@ jobs:
   deploy:
     runs-on: [ubuntu-latest]
     needs: [test]
-    if: github.event_name == 'push' && github.event.tags == 'v*'
+    if: github.event_name == 'push'
     steps:
       - uses: abrahammer/adsk-action@master
         with:

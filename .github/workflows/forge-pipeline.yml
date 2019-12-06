@@ -79,12 +79,27 @@ jobs:
         with:
           name: ${{ matrix.os }}
           path: ../artifacts
-  deploy:
+  deploy-dev:
     runs-on: [ubuntu-latest]
     needs: [test]
     if: github.event_name == 'push'
     steps:
-      - uses: abrahammer/adsk-action@master
+      - uses: abrahammer/deploy-action@master
         with:
-          service_id: 'ACME'
-          version: 'latest'
+          environment: 'Development'
+  deploy-stg:
+    runs-on: [ubuntu-latest]
+    needs: [deploy-dev]
+    if: github.event_name == 'push'
+    steps:
+      - uses: abrahammer/deploy-action@master
+        with:
+          environment: 'Staging'
+  deploy-prd:
+    runs-on: [ubuntu-latest]
+    needs: [deploy-stg]
+    if: github.event_name == 'push'
+    steps:
+      - uses: abrahammer/deploy-action@master
+        with:
+          environment: 'Production'
